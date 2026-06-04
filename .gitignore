@@ -1,0 +1,17 @@
+# Ceedling generated output
+build/
+docs/exercises/build/
+
+# Coverage artifacts
+*.gcov
+*.gcda
+*.gcno
+coverage/
+
+# Firmware build leftovers (in case Lab 2 was carried in and built)
+output/
+*.o
+*.elf
+*.bin
+*.hex
+*.map

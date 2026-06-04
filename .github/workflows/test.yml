@@ -1,0 +1,73 @@
+name: "Lab 4 — Unit Tests"
+
+on:
+  push:
+    paths:
+      - "src/**"
+      - "inc/**"
+      - "test/**"
+      - "docs/exercises/**"
+      - "project.yml"
+      - "Makefile"
+      - ".github/workflows/test.yml"
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    name: Run Ceedling unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Install Ceedling
+        run: gem install ceedling --no-document
+
+      # Warm-up exercises — always present, no firmware needed.
+      # Fails if any test FAILs (test_clamp before Exercise 2 is solved) or
+      # any TODO assertion is still IGNORED (Exercises 1, 3, 4).
+      - name: Run warm-up exercises
+        working-directory: docs/exercises
+        run: |
+          output=$(ceedling test:all 2>&1)
+          status=$?
+          echo "$output"
+          if [ $status -ne 0 ]; then
+            echo "::error::Warm-up exercises have failing tests. Fix all failures before submitting."
+            exit $status
+          fi
+          if echo "$output" | grep -qE '[1-9][0-9]* Ignored'; then
+            echo "::error::Warm-up exercises still have IGNORED tests. Complete every TODO in docs/exercises/test/ before submitting."
+            exit 1
+          fi
+
+      # Main suite — needs the carried-in driver (src/gpio.c, inc/gpio.h).
+      # Step is skipped with a warning until the driver is committed.
+      # Once present, fails on FAILUREs *or* any remaining IGNORED TODO.
+      - name: Run driver + app unit tests
+        run: |
+          if [ ! -f src/gpio.c ] || [ ! -f inc/gpio.h ]; then
+            echo "::warning::src/gpio.c or inc/gpio.h not found — carry your Lab 2 driver in with scripts/copy_lab2.sh, then commit it."
+            exit 0
+          fi
+          output=$(ceedling test:all 2>&1)
+          status=$?
+          echo "$output"
+          if [ $status -ne 0 ]; then
+            echo "::error::Unit tests have failing tests. Fix all failures before submitting."
+            exit $status
+          fi
+          if echo "$output" | grep -qE '[1-9][0-9]* Ignored'; then
+            echo "::error::Some TODOs are still IGNORED. Complete every TODO in test/test_gpio.c and test/test_app.c before submitting."
+            exit 1
+          fi
+
+      - name: Coverage summary
+        if: ${{ hashFiles('src/gpio.c') != '' }}
+        run: ceedling gcov:all

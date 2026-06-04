@@ -1,0 +1,50 @@
+# Ceedling configuration — warm-up exercises
+#
+# This is a SELF-CONTAINED Ceedling project. It does not need the STM32
+# firmware: every exercise compiles and runs natively on your PC.
+#
+# Run everything:        ceedling test:all
+# Run one test file:     ceedling test:test_calculator
+# List the test tasks:   ceedling summary   (or just read test/)
+#
+# Reference: ../ceedling_guide.md
+
+:project:
+  :build_root: build
+  :test_file_prefix: test_
+  :default_tasks:
+    - test:all
+  # CMock generates fake versions of a dependency so you can test a module in
+  # isolation. Needed by Exercise 3.
+  :use_mocks: TRUE
+  # CException adds Try/Catch/Throw to C. Needed by Exercise 4.
+  :use_exceptions: TRUE
+  # Keep the toolchain requirements minimal: no separate C preprocessor pass.
+  :use_test_preprocessor: :none
+
+:paths:
+  :test:
+    - +:test/**
+  :source:
+    - src/**
+  :include:
+    - src/**
+
+:cmock:
+  # Generated mocks are named mock_<header>.h (e.g. mock_i2c.h).
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  # Each test must consume exactly the calls it set up — no more, no less.
+  :enforce_strict_ordering: TRUE
+  :plugins:
+    - :ignore         # gpio_xxx_Ignore()        — "I don't care about this call"
+    - :callback       # gpio_xxx_AddCallback()   — custom fake behaviour
+    - :expect_any_args
+
+# Unity assertion options. UNITY_INCLUDE_DOUBLE lets you assert on doubles.
+:defines:
+  :test:
+    - UNITY_INCLUDE_DOUBLE
+
+:unity:
+  :use_param_tests: TRUE

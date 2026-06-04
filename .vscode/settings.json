@@ -1,0 +1,10 @@
+{
+  // Unit tests build and run on the host (native gcc bundled with Ruby DevKit),
+  // not on the board. IntelliSense therefore uses the host compiler.
+  "files.associations": {
+    "*.h": "c"
+  },
+  "editor.formatOnSave": false,
+  "C_Cpp.default.intelliSenseMode": "gcc-x64",
+  "C_Cpp.default.cStandard": "c11"
+}

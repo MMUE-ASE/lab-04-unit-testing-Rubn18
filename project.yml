@@ -1,0 +1,64 @@
+# Ceedling configuration — Lab 4 main project
+#
+# This project tests the firmware you carried in from Lab 2:
+#   - src/gpio.c   your GPIO driver   -> tested directly  (test/test_gpio.c)
+#   - src/app.c    button->LED logic  -> tested by mocking gpio.h (test/test_app.c)
+#
+# The tests run NATIVELY on your PC (host gcc), never on the board. That is the
+# whole point of unit testing: fast, hardware-free feedback on your logic.
+#
+# Front door:   make test   /   make coverage   /   make clean
+# Or directly:  ceedling test:all   /   ceedling gcov:all   /   ceedling clobber
+#
+# Reference: docs/ceedling_guide.md
+
+:project:
+  :build_root: build
+  :test_file_prefix: test_
+  :default_tasks:
+    - test:all
+  # CMock is needed by test_app.c (it mocks gpio.h).
+  :use_mocks: TRUE
+  # CException is available project-wide so your driver could throw if you ever
+  # add validation; not required by the provided tests.
+  :use_exceptions: TRUE
+  :use_test_preprocessor: :none
+
+:paths:
+  :test:
+    - +:test/**
+    - -:test/support
+  :source:
+    - src/**
+    - inc/**
+  :include:
+    - src/**
+    - inc/**
+  :support:
+    - test/support
+
+:cmock:
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  :enforce_strict_ordering: TRUE
+  :plugins:
+    - :ignore
+    - :callback
+    - :expect_any_args
+  # The driver uses these types; show them as hex in failure messages so a wrong
+  # register value is easy to read.
+  :treat_as:
+    uint32_t: HEX32
+    uint8_t: HEX8
+
+:defines:
+  :test:
+    - UNITY_INCLUDE_DOUBLE
+
+# Coverage (Phase 3). `make coverage` runs the tests instrumented with gcov and
+# prints a per-file line-coverage summary to the console. HTML reports are
+# optional and need gcovr (`pip install gcovr`); to enable them, add a
+# `:gcov: :reports:` block — see docs/ceedling_guide.md section 8.
+:plugins:
+  :enabled:
+    - gcov
