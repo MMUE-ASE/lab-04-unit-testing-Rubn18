@@ -83,7 +83,9 @@ void test_config_output_does_not_corrupt_other_pins(void)
 void test_read_returns_pin_level_from_idr(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    FAKE_IDR(port) = (1u << 13); 
+    TEST_ASSERT_EQUAL_INT(1, gpio_read(port, 13));
+    TEST_ASSERT_EQUAL_INT(0, gpio_read(port, 12));
 }
 
 /* ----- TODO P2.4a ------------------------------------------------------- *
