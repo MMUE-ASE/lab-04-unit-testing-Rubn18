@@ -71,7 +71,11 @@ void test_app_step_drives_led_low_when_button_reads_low(void)
 void test_app_init_configures_pins_in_order(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_enable_clock_Expect(LD2_PORT);
+    gpio_enable_clock_Expect(B1_PORT);
+    gpio_config_output_Expect(LD2_PORT,LD2_PIN);
+    gpio_config_input_Expect(B1_PORT,B1_PIN);
+    app_init();
 }
 
 /* ----- TODO P3.3 (optional / advanced) ---------------------------------- *
