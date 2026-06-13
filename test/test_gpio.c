@@ -96,7 +96,8 @@ void test_read_returns_pin_level_from_idr(void)
 void test_write_drives_pin_high_via_bsrr(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_write(port, 7, 1);
+    TEST_ASSERT_EQUAL_HEX32(1u << 7, FAKE_BSRR(port)); // Pone a 1 el pin 7 del puerto
 }
 
 /* ----- TODO P2.4b ------------------------------------------------------- *
@@ -109,7 +110,8 @@ void test_write_drives_pin_high_via_bsrr(void)
 void test_write_drives_pin_low_via_bsrr(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_write(port,7,0);
+    TEST_ASSERT_EQUAL_HEX32(1u << (7 + 16), FAKE_BSRR(port)); // Pone a 0 el pin 7 del puerto   
 }
 
 /*
