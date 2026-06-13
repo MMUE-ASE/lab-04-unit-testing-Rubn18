@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/RIWY5v0L)
 # Lab 4 — Unit Testing with Ceedling
 
 [![Hardware](https://img.shields.io/badge/Hardware-STM32_NUCLEO--F412ZG-03234B.svg?logo=stmicroelectronics&logoColor=white)](https://www.st.com/en/evaluation-tools/nucleo-f412zg.html)
@@ -9,18 +10,23 @@
 
 ## Table of Contents
 
-- [Context](#context)
-- [Objectives](#objectives)
-- [Getting Started](#getting-started)
-- [Phase Overview](#phase-overview)
-- [Phase 0 — Why unit testing](#phase-0--why-unit-testing)
-- [Phase 1 — Warm-up: Ceedling, Unity, CMock, CException](#phase-1--warm-up-ceedling-unity-cmock-cexception)
-- [Phase 2 — Test your GPIO driver](#phase-2--test-your-gpio-driver)
-- [Phase 3 — Mock the driver and measure coverage](#phase-3--mock-the-driver-and-measure-coverage)
-- [Milestones](#milestones)
-- [CI and submission](#ci-and-submission)
-- [Common errors](#common-errors)
-- [Rubric](#rubric)
+- [Lab 4 — Unit Testing with Ceedling](#lab-4--unit-testing-with-ceedling)
+  - [Table of Contents](#table-of-contents)
+  - [Context](#context)
+  - [Objectives](#objectives)
+  - [Getting Started](#getting-started)
+    - [Installing MinGW-w64 (gcc / gcov)](#installing-mingw-w64-gcc--gcov)
+    - [Verify all prerequisites](#verify-all-prerequisites)
+  - [Phase Overview](#phase-overview)
+  - [Phase 0 — Why unit testing](#phase-0--why-unit-testing)
+  - [Phase 1 — Warm-up: Ceedling, Unity, CMock, CException](#phase-1--warm-up-ceedling-unity-cmock-cexception)
+  - [Phase 2 — Test your GPIO driver](#phase-2--test-your-gpio-driver)
+  - [Phase 3 — Mock the driver and measure coverage](#phase-3--mock-the-driver-and-measure-coverage)
+  - [Milestones](#milestones)
+  - [CI and submission](#ci-and-submission)
+    - [Commit conventions](#commit-conventions)
+  - [Common errors](#common-errors)
+  - [Rubric](#rubric)
 
 ---
 
@@ -59,9 +65,37 @@ application module, by mocking the driver away entirely.
 
 ## Getting Started
 
-This lab needs **Ruby + Ceedling**. The host C compiler comes with the Ruby
-*DevKit*. Full install steps are in the Doc about Software Tools that you have
-in the virtual classroom
+This lab needs **two tools** on your Windows PATH:
+
+1. **Ruby + Ceedling** — the test framework already installed.
+2. **MinGW-w64 (gcc + gcov)** — the native host compiler that Ceedling uses to
+   build and run tests on your PC.
+
+### Installing MinGW-w64 (gcc / gcov)
+
+The zip for **Windows x86-64** is available in the **aula virtual**, in the
+Lab 4 section. It is the _winlibs_ distribution of MinGW-w64 with GCC 16.1.
+
+1. Download the zip from the aula virtual (Lab 4 section).
+2. Extract its contents to `C:\mingw64` — after extraction the compiler should
+   be at `C:\mingw64\bin\gcc.exe`.
+3. Add to PATH **without administrator privileges** — **OPEN POWERSHELL** and run:
+
+   ```powershell
+   [Environment]::SetEnvironmentVariable("PATH", "C:\mingw64\bin;" + [Environment]::GetEnvironmentVariable("PATH", "User"), "User")
+   ```
+
+4. **Close** the PowerShell window and open a **new** terminal (Git Bash or
+   PowerShell). Verify:
+
+   ```bash
+   gcc --version
+   gcov --version
+   ```
+
+   Both should respond with version information (GCC 16.1.0 or similar).
+
+### Verify all prerequisites
 
 ```bash
 # 1 — clone your repository and enter it
@@ -69,6 +103,8 @@ git clone https://github.com/<org>/<assigned-repo>.git
 cd <assigned-repo>
 
 # 2 — verify the tools answer (Git Bash)
+gcc --version
+gcov --version
 ruby --version
 ceedling version
 

@@ -50,7 +50,9 @@ void test_app_step_drives_led_high_when_button_reads_high(void)
 void test_app_step_drives_led_low_when_button_reads_low(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_read_ExpectAndReturn(B1_PORT, B1_PIN, 0);
+    gpio_write_Expect(LD2_PORT, LD2_PIN, 0);
+    app_step();
 }
 
 /* ----- TODO P3.2 -------------------------------------------------------- *
@@ -69,7 +71,11 @@ void test_app_step_drives_led_low_when_button_reads_low(void)
 void test_app_init_configures_pins_in_order(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_enable_clock_Expect(LD2_PORT);
+    gpio_enable_clock_Expect(B1_PORT);
+    gpio_config_output_Expect(LD2_PORT,LD2_PIN);
+    gpio_config_input_Expect(B1_PORT,B1_PIN);
+    app_init();
 }
 
 /* ----- TODO P3.3 (optional / advanced) ---------------------------------- *
@@ -84,5 +90,7 @@ void test_app_init_configures_pins_in_order(void)
  */
 void test_app_step_forwards_raw_value_unchanged(void)
 {
-    /* YOUR CODE HERE — remove this comment and write the test if you attempt P3.3 */
+    gpio_read_ExpectAndReturn(B1_PORT, B1_PIN, 2);
+    gpio_write_Expect(LD2_PORT, LD2_PIN, 2);
+    app_step(); // Lo que hace el test es comprobar que el valor que se lee del botón se escribe tal cual en el led, sin ningún tipo de filtrado o umbral
 }

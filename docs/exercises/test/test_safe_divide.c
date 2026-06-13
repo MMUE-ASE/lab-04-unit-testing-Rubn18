@@ -50,5 +50,11 @@ void test_safe_divide_by_zero_throws(void)
 void test_safe_divide_negative_by_zero_throws(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    CEXCEPTION_T e = 0;
+    Try {
+        safe_divide(-50, 0);
+        TEST_FAIL_MESSAGE("safe_divide(-50, 0) should have thrown");
+    } Catch (e) {
+        TEST_ASSERT_EQUAL(ERR_DIVIDE_BY_ZERO, e);
+    }
 }
