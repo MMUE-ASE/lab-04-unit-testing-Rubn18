@@ -51,7 +51,11 @@ void test_config_output_sets_moder_to_01(void)
 void test_config_input_sets_moder_to_00(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    FAKE_MODER(port) = 0x3u << (9 * 2); // Escribimos un valor distinto de 00 p.e. 11 para la comprobacion posterior
+    gpio_config_input(port,9);
+    uint32_t field = (FAKE_MODER(port) >> (9*2)) & 0x3u;
+
+    TEST_ASSERT_EQUAL_HEX32(0x0u, field);
 }
 
 /* ----- TODO P2.2 -------------------------------------------------------- *
