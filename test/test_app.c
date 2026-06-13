@@ -90,5 +90,7 @@ void test_app_init_configures_pins_in_order(void)
  */
 void test_app_step_forwards_raw_value_unchanged(void)
 {
-    /* YOUR CODE HERE — remove this comment and write the test if you attempt P3.3 */
+    gpio_read_ExpectAndReturn(B1_PORT, B1_PIN, 2);
+    gpio_write_Expect(LD2_PORT, LD2_PIN, 2);
+    app_step(); // Lo que hace el test es comprobar que el valor que se lee del botón se escribe tal cual en el led, sin ningún tipo de filtrado o umbral
 }
