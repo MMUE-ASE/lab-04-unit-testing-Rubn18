@@ -50,7 +50,9 @@ void test_app_step_drives_led_high_when_button_reads_high(void)
 void test_app_step_drives_led_low_when_button_reads_low(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_read_ExpectAndReturn(B1_PORT, B1_PIN, 0);
+    gpio_write_Expect(LD2_PORT, LD2_PIN, 0);
+    app_step();
 }
 
 /* ----- TODO P3.2 -------------------------------------------------------- *
