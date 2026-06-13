@@ -67,7 +67,12 @@ void test_config_input_sets_moder_to_00(void)
 void test_config_output_does_not_corrupt_other_pins(void)
 {
     /* YOUR CODE HERE */
-    TEST_IGNORE_MESSAGE("Remove this line and write the test");
+    gpio_config_output(port, 0);
+    gpio_config_output(port, 1);
+    uint32_t field0 = (FAKE_MODER(port) >> (0 * 2)) & 0x3u;
+    uint32_t field1 = (FAKE_MODER(port) >> (1 * 2)) & 0x3u;
+    TEST_ASSERT_EQUAL_HEX32(0x1u, field0);
+    TEST_ASSERT_EQUAL_HEX32(0x1u, field1);
 }
 
 /* ----- TODO P2.3 -------------------------------------------------------- *
